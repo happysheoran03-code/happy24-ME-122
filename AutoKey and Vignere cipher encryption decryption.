@@ -1,0 +1,100 @@
+
+def clean_text(text):
+    return ''.join(c.upper() for c in text if c.isalpha())
+
+
+# VIGENERE CIPHER
+def vigenere_encrypt(plaintext, key):
+    plaintext = clean_text(plaintext)
+    key = clean_text(key)
+    if not key:
+        raise ValueError("Key cannot be empty.")
+
+    ciphertext = ""
+    for i, char in enumerate(plaintext):
+        p = ord(char) - ord('A')
+        k = ord(key[i % len(key)]) - ord('A')
+        ciphertext += chr((p + k) % 26 + ord('A'))
+
+    return ciphertext
+
+
+def vigenere_decrypt(ciphertext, key):
+    ciphertext = clean_text(ciphertext)
+    key = clean_text(key)
+    if not key:
+        raise ValueError("Key cannot be empty.")
+
+    plaintext = ""
+    for i, char in enumerate(ciphertext):
+        c = ord(char) - ord('A')
+        k = ord(key[i % len(key)]) - ord('A')
+        plaintext += chr((c - k) % 26 + ord('A'))
+
+    return plaintext
+
+
+# AUTOKEY CIPHER (plaintext-autokey)
+def autokey_encrypt(plaintext, key):
+    plaintext = clean_text(plaintext)
+    key = clean_text(key)
+    if not key:
+        raise ValueError("Key cannot be empty.")
+
+    keystream = key + plaintext
+    ciphertext = ""
+
+    for i, char in enumerate(plaintext):
+        p = ord(char) - ord('A')
+        k = ord(keystream[i]) - ord('A')
+        ciphertext += chr((p + k) % 26 + ord('A'))
+
+    return ciphertext
+
+
+def autokey_decrypt(ciphertext, key):
+    ciphertext = clean_text(ciphertext)
+    key = clean_text(key)
+    if not key:
+        raise ValueError("Key cannot be empty.")
+
+    plaintext = ""
+
+    for i, char in enumerate(ciphertext):
+        c = ord(char) - ord('A')
+
+        if i < len(key):
+            k = ord(key[i]) - ord('A')
+        else:
+            k = ord(plaintext[i - len(key)]) - ord('A')
+
+        plaintext += chr((c - k) % 26 + ord('A'))
+
+    return plaintext
+
+
+# MAIN PROGRAM
+print("1. Vigenere Cipher")
+print("2. AutoKey Cipher")
+
+choice = input("Choose cipher (1 or 2): ")
+
+plaintext = input("Enter plaintext: ")
+key = input("Enter key: ")
+
+if choice == '1':
+    encrypted = vigenere_encrypt(plaintext, key)
+    decrypted = vigenere_decrypt(encrypted, key)
+
+    print("Vigenere Encrypted Text:", encrypted)
+    print("Vigenere Decrypted Text:", decrypted)
+
+elif choice == '2':
+    encrypted = autokey_encrypt(plaintext, key)
+    decrypted = autokey_decrypt(encrypted, key)
+
+    print("AutoKey Encrypted Text:", encrypted)
+    print("AutoKey Decrypted Text:", decrypted)
+
+else:
+    print("Invalid choice! Please choose 1 or 2.")
