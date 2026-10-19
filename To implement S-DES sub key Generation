@@ -1,0 +1,53 @@
+P10 = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
+P8 = [6, 3, 7, 4, 8, 5, 10, 9]
+
+
+def permute(bits, table):
+    return ''.join(bits[i - 1] for i in table)
+
+
+def left_shift(bits, n):
+    return bits[n:] + bits[:n]
+
+
+def generate_keys(key):
+    if len(key) != 10 or any(bit not in '01' for bit in key):
+        raise ValueError("Key must be exactly 10 binary bits.")
+
+    # Apply P10 permutation
+    p10_key = permute(key, P10)
+
+    # Split into two 5-bit halves
+    left, right = p10_key[:5], p10_key[5:]
+
+    # Circular left shift by 1
+    left = left_shift(left, 1)
+    right = left_shift(right, 1)
+
+    # Combine and apply P8 to generate K1
+    k1 = permute(left + right, P8)
+
+    # Circular left shift by 2 more positions
+    left = left_shift(left, 2)
+    right = left_shift(right, 2)
+
+    # Combine and apply P8 to generate K2
+    k2 = permute(left + right, P8)
+
+    return p10_key, k1, k2
+
+
+# Main program
+key = input("Enter a 10-bit binary key: ")
+
+try:
+    p10_key, k1, k2 = generate_keys(key)
+
+    print("\nOriginal Key:", key)
+    print("After P10 Permutation:", p10_key)
+    print("Subkey K1:", k1)
+    print("Subkey K2:", k2)
+
+except ValueError as e:
+    print("Error:", e)
+
