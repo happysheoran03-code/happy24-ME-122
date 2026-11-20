@@ -1,0 +1,33 @@
+
+# Diffie-Hellman Key Exchange Algorithm
+
+# Step 1: Take public values
+p = int(input("Enter a prime number (p): "))
+g = int(input("Enter a primitive root (g): "))
+
+# Step 2: Take private keys
+a = int(input("Enter Alice's private key: "))
+b = int(input("Enter Bob's private key: "))
+
+# Step 3: Calculate public keys
+A = pow(g, a, p)
+B = pow(g, b, p)
+
+# Step 4: Exchange public keys
+print("\nAlice's public key:", A)
+print("Bob's public key:", B)
+
+# Step 5: Calculate shared secret keys
+alice_secret = pow(B, a, p)
+bob_secret = pow(A, b, p)
+
+# Step 6: Display shared secret keys
+print("\nAlice's shared secret key:", alice_secret)
+print("Bob's shared secret key:", bob_secret)
+
+# Step 7: Verify the keys
+if alice_secret == bob_secret:
+    print("\nKey Exchange Successful!")
+    print("Both users have the same secret key.")
+else:
+    print("\nKey Exchange Failed!")
