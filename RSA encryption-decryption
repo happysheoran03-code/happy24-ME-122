@@ -1,0 +1,48 @@
+
+# RSA Encryption and Decryption Algorithm
+
+# Step 1: Select two prime numbers
+p = int(input("Enter first prime number (p): "))
+q = int(input("Enter second prime number (q): "))
+
+# Step 2: Calculate n and phi(n)
+n = p * q
+phi = (p - 1) * (q - 1)
+
+# Step 3: Select public key e
+e = 2
+while e < phi:
+    if math.gcd(e, phi) == 1:
+        break
+    e += 1
+
+# Step 4: Calculate private key d
+d = pow(e, -1, phi)
+
+# Step 5: Display public and private keys
+print("\nPublic Key:", (e, n))
+print("Private Key:", (d, n))
+
+# Step 6: Encryption
+message = input("\nEnter message (uppercase letters only): ").upper()
+
+if not message.isalpha():
+    print("Please enter letters only.")
+else:
+    encrypted = []
+
+    for char in message:
+        m = ord(char) - ord('A')
+        c = pow(m, e, n)
+        encrypted.append(c)
+
+    print("\nEncrypted Message:", encrypted)
+
+    # Step 7: Decryption
+    decrypted = ""
+
+    for c in encrypted:
+        m = pow(c, d, n)
+        decrypted += chr(m + ord('A'))
+
+    print("Decrypted Message:", decrypted)
