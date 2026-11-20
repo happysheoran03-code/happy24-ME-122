@@ -1,0 +1,15 @@
+
+# Program to Generate SHA-1 Hash
+
+import hashlib
+
+# Take input from the user
+message = input("Enter the message: ")
+
+# Generate SHA-1 hash
+sha1_hash = hashlib.sha1(message.encode()).hexdigest()
+
+# Display the original message and hash
+print("\nOriginal Message:", message)
+print("SHA-1 Hash:", sha1_hash)
+
